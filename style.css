@@ -77,10 +77,12 @@ h2 em,h1 em{font-style:italic;background:var(--grad);-webkit-background-clip:tex
 .hero-phone-wrap{display:flex;justify-content:center;perspective:1200px}
 .phone{position:relative;width:min(290px,72vw);aspect-ratio:9/19;border-radius:42px;background:#12060a;padding:11px;box-shadow:0 40px 90px rgba(0,0,0,.55),inset 0 0 0 2px #3d2320;transform-style:preserve-3d;transition:transform .25s ease-out}
 .phone-notch{position:absolute;top:11px;left:50%;transform:translateX(-50%);width:96px;height:22px;background:#12060a;border-radius:0 0 14px 14px;z-index:3}
-.phone-track{display:flex;flex-direction:column;gap:10px;height:100%;overflow:hidden;border-radius:33px;animation:phoneScroll 26s linear infinite}
+.phone-screen{position:relative;height:100%;overflow:hidden;border-radius:33px;background:#000;transform:translateZ(0)}
+.phone-track{display:flex;flex-direction:column;will-change:transform}
+.phone-track.is-looping{animation:phoneScroll 34s linear infinite}
 .phone:hover .phone-track{animation-play-state:paused}
-@keyframes phoneScroll{0%{transform:translateY(0)}100%{transform:translateY(-58%)}}
-.phone-card{position:relative;border-radius:24px;overflow:hidden;flex:0 0 68%}
+@keyframes phoneScroll{from{transform:translateY(0)}to{transform:translateY(-50%)}}
+.phone-card{position:relative;flex:0 0 auto;width:100%;aspect-ratio:9/14.5;margin:0 0 10px;border-radius:24px;overflow:hidden;background:#1d070b}
 .phone-card img{width:100%;height:100%;object-fit:cover}
 .phone-card figcaption{position:absolute;left:0;right:0;bottom:0;padding:1.6rem .9rem .7rem;font-size:.78rem;color:#fff;background:linear-gradient(transparent,rgba(0,0,0,.75))}
 .phone-ui{position:absolute;left:0;right:0;bottom:20px;display:flex;justify-content:space-between;padding:0 1.3rem;font-size:.75rem;color:#ffe9d2;text-shadow:0 2px 8px rgba(0,0,0,.8);z-index:2}
@@ -231,7 +233,7 @@ h2 em,h1 em{font-style:italic;background:var(--grad);-webkit-background-clip:tex
 .contact-lines a{font-weight:600}
 .enquiry-form{background:var(--cream);border:1px solid rgba(217,164,65,.5);border-radius:var(--radius);padding:2rem;box-shadow:var(--shadow);display:grid;grid-template-columns:1fr 1fr;gap:1.1rem}
 .enquiry-form label{display:flex;flex-direction:column;gap:.4rem;font-size:.85rem;font-weight:600;letter-spacing:.05em;color:var(--maroon)}
-.enquiry-form label:nth-of-type(1),.enquiry-form label:nth-of-type(4),.enquiry-form label:nth-of-type(5){grid-column:1/-1}
+.enquiry-form label:nth-of-type(1),.enquiry-form label:nth-of-type(4),.enquiry-form label:nth-of-type(5),.enquiry-form label:nth-of-type(6){grid-column:1/-1}
 .enquiry-form input,.enquiry-form select{font-family:var(--sans);font-size:.98rem;padding:.72rem .9rem;border:1px solid rgba(163,22,33,.3);border-radius:10px;background:#fff;color:var(--ink)}
 .enquiry-form input:focus,.enquiry-form select:focus{outline:2px solid var(--saffron);outline-offset:1px}
 .who-toggle{grid-column:1/-1;border:0;display:flex;align-items:center;gap:.7rem;flex-wrap:wrap}
@@ -240,6 +242,8 @@ h2 em,h1 em{font-style:italic;background:var(--grad);-webkit-background-clip:tex
 .who-toggle input{position:absolute;opacity:0}
 .who-toggle span{border:1.5px solid rgba(163,22,33,.4);border-radius:999px;padding:.5rem 1.15rem;cursor:pointer;font-size:.9rem;transition:.3s}
 .who-toggle input:checked+span{background:var(--grad);color:#fff;border-color:transparent}
+.who-toggle input:focus-visible+span{outline:2px solid var(--saffron);outline-offset:2px}
+.form-error{grid-column:1/-1;color:var(--sindoor);font-size:.88rem;font-weight:600;text-align:center;min-height:1.2em}
 .form-submit{grid-column:1/-1;justify-content:center;border:0;cursor:pointer;font-family:var(--sans)}
 .form-note{grid-column:1/-1;text-align:center;font-size:.83rem;color:var(--ink-soft)}
 
@@ -311,12 +315,16 @@ html{overflow-x:clip}
 .autoplay-head .eyebrow::after{margin-top:.45rem}
 .autoplay-note{color:#e8d5c3;font-size:.95rem;max-width:460px}
 .autoplay-viewport{overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent,#000 4%,#000 96%,transparent);mask-image:linear-gradient(90deg,transparent,#000 4%,#000 96%,transparent)}
-.autoplay-track{display:flex;gap:1.1rem;width:max-content;padding:.2rem 0 .4rem;animation:apScroll 38s linear infinite}
+.autoplay-track{display:flex;gap:1.1rem;width:max-content;padding:.2rem 0 .4rem}
+.autoplay-track.ap-ready{animation:apScroll 38s linear infinite}
 .autoplay-viewport:hover .autoplay-track{animation-play-state:paused}
 @keyframes apScroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 .ap-card{flex:0 0 auto;width:196px;color:#fff}
 .ap-media{position:relative;display:block;border-radius:20px;overflow:hidden;aspect-ratio:9/15.5;background:#1d070b;box-shadow:0 16px 38px rgba(0,0,0,.45)}
-.ap-media img{width:100%;height:100%;object-fit:cover;animation:apZoom 9s ease-in-out infinite alternate}
+.ap-media img,.ap-media video{width:100%;height:100%;object-fit:cover}
+.ap-media img{animation:apZoom 9s ease-in-out infinite alternate}
+.ap-media video{position:absolute;inset:0}
+.ap-card{cursor:pointer}
 .ap-card:nth-child(odd) .ap-media img{animation-duration:11s}
 .ap-card:nth-child(3n) .ap-media img{animation-duration:13s}
 @keyframes apZoom{from{transform:scale(1.02) translateY(0)}to{transform:scale(1.17) translateY(-2.5%)}}
@@ -344,5 +352,30 @@ html{overflow-x:clip}
 }
 @media(max-width:560px){
   .ap-card{width:158px}
-  .autoplay-track{animation-duration:30s}
+  .autoplay-track.ap-ready{animation-duration:30s}
+}
+
+
+/* ===== Reel player (on-page lightbox) ===== */
+.reel-modal{position:fixed;inset:0;z-index:2000;display:flex;align-items:center;justify-content:center;padding:1rem}
+.reel-modal[hidden]{display:none}
+.reel-modal-backdrop{position:absolute;inset:0;background:rgba(20,3,6,.88);backdrop-filter:blur(6px)}
+.reel-modal-box{position:relative;width:min(400px,94vw);display:flex;flex-direction:column;gap:.7rem;align-items:center}
+.reel-modal-frame{width:100%;height:min(80vh,720px);border-radius:18px;overflow:hidden;background:#12060a;box-shadow:0 30px 80px rgba(0,0,0,.6)}
+.reel-modal-frame iframe{width:100%;height:100%;border:0;background:#fff}
+.reel-modal-close{position:absolute;top:-2.6rem;right:0;width:2.2rem;height:2.2rem;border-radius:50%;border:1.5px solid rgba(255,255,255,.7);background:rgba(255,255,255,.1);color:#fff;font-size:1.4rem;line-height:1;cursor:pointer}
+.reel-modal-close:hover{background:rgba(255,255,255,.25)}
+.reel-modal-ig{color:#f6d9a0;font-size:.9rem}
+.reel-modal-ig:hover{color:#fff}
+
+/* hidden mobile menu must not be focusable */
+@media(max-width:1080px){
+  .main-nav{visibility:hidden;transition:transform .5s,visibility 0s .5s}
+  .main-nav.open{visibility:visible;transition:transform .5s,visibility 0s}
+}
+
+/* reduced motion: strip becomes a normal swipeable row, phone shows first cards */
+@media (prefers-reduced-motion: reduce){
+  .autoplay-viewport{overflow-x:auto;-webkit-mask-image:none;mask-image:none}
+  .autoplay-track{width:max-content;padding-inline:4%}
 }
