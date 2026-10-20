@@ -5,6 +5,33 @@
   var finePointer = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
   var isMobile = window.innerWidth < 821;
 
+  /* ---------- Muted autoplay previews (works on mobile: muted + playsinline) ---------- */
+  var saveData = navigator.connection && navigator.connection.saveData;
+  var videoIO = (!reduced && !saveData && "IntersectionObserver" in window)
+    ? new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) {
+          var v = en.target;
+          if (en.isIntersecting) { var p = v.play(); if (p && p.catch) p.catch(function () {}); }
+          else v.pause();
+        });
+      }, { threshold: 0.35 })
+    : null;
+  function attachVideo(host, media) {
+    var src = host && host.getAttribute("data-video");
+    if (!videoIO || !src || !media || media.querySelector("video")) return;
+    var img = media.querySelector("img");
+    var v = document.createElement("video");
+    v.muted = true; v.loop = true; v.playsInline = true; v.preload = "none";
+    v.setAttribute("muted", ""); v.setAttribute("playsinline", ""); v.setAttribute("webkit-playsinline", "");
+    v.setAttribute("aria-hidden", "true"); v.tabIndex = -1;
+    if (img) v.poster = img.getAttribute("src");
+    v.src = src;
+    v.addEventListener("playing", function () { if (img) img.style.animation = "none"; });
+    v.addEventListener("error", function () { videoIO.unobserve(v); v.remove(); }); // missing file: keep the still image
+    media.insertBefore(v, img ? img.nextSibling : media.firstChild);
+    videoIO.observe(v);
+  }
+
   /* ---------- Scroll lock (mobile menu + reel player share it) ---------- */
   var locks = { nav: false, modal: false };
   var lenis = null;
@@ -75,7 +102,7 @@
   var canvas = document.getElementById("gold-dust");
   if (canvas && !reduced) {
     var ctx = canvas.getContext("2d"), W, H, parts = [];
-    var COUNT = isMobile ? 34 : 80;
+    var COUNT = isMobile ? 16 : 70;
     var dustVisible = true, dustRunning = false;
     var size = function () {
       W = canvas.width = canvas.offsetWidth;
@@ -121,6 +148,7 @@
       c.setAttribute("aria-hidden", "true");
       phoneTrack.appendChild(c);
     });
+    phoneTrack.querySelectorAll(".phone-card").forEach(function (c) { attachVideo(c, c); });
     if (!reduced) phoneTrack.classList.add("is-looping");
   }
 
@@ -153,29 +181,6 @@
   /* ---------- Reel strip: seamless loop that fills any screen width ---------- */
   var apTrack = document.getElementById("ap-track");
   var apOriginals = apTrack ? Array.prototype.slice.call(apTrack.children) : [];
-  var apVideoIO = null;
-  function initStripVideos() {
-    if (!apTrack || reduced || !("IntersectionObserver" in window)) return;
-    if (apVideoIO) apVideoIO.disconnect();
-    apVideoIO = new IntersectionObserver(function (entries) {
-      entries.forEach(function (en) {
-        var v = en.target;
-        if (en.isIntersecting) { var p = v.play(); if (p && p.catch) p.catch(function () {}); }
-        else v.pause();
-      });
-    }, { threshold: 0.35 });
-    apTrack.querySelectorAll(".ap-card[data-video]").forEach(function (card) {
-      var media = card.querySelector(".ap-media");
-      if (!media || media.querySelector("video")) return;
-      var v = document.createElement("video");
-      v.src = card.getAttribute("data-video");
-      v.muted = true; v.loop = true; v.playsInline = true; v.preload = "metadata";
-      v.setAttribute("muted", ""); v.setAttribute("playsinline", ""); v.setAttribute("aria-hidden", "true");
-      media.insertBefore(v, media.querySelector(".ap-badge"));
-      var img = media.querySelector("img"); if (img) img.style.animation = "none";
-      apVideoIO.observe(v);
-    });
-  }
   var apWidth = 0;
   function buildStrip() {
     if (!apTrack || !apOriginals.length) return;
@@ -199,7 +204,7 @@
       if (idx >= apOriginals.length * k) { card.setAttribute("aria-hidden", "true"); card.setAttribute("tabindex", "-1"); }
     });
     if (!reduced) apTrack.classList.add("ap-ready");
-    initStripVideos();
+    apTrack.querySelectorAll(".ap-card[data-video]").forEach(function (c) { attachVideo(c, c.querySelector(".ap-media")); });
   }
   buildStrip();
   var apResizeT;
@@ -209,6 +214,47 @@
       if (window.innerWidth !== apWidth) buildStrip();
     }, 250);
   });
+
+  /* ---------- Reviews: auto-scrolling loop ---------- */
+  var rvTrack = document.getElementById("review-track");
+  var rvOriginals = rvTrack ? Array.prototype.slice.call(rvTrack.children) : [];
+  var rvWidth = 0;
+  function buildReviews() {
+    if (!rvTrack || !rvOriginals.length) return;
+    rvWidth = window.innerWidth;
+    rvTrack.classList.remove("rv-ready");
+    rvTrack.innerHTML = "";
+    rvOriginals.forEach(function (c) { rvTrack.appendChild(c.cloneNode(true)); });
+    var gap = parseFloat(getComputedStyle(rvTrack).columnGap) || 22;
+    rvTrack.style.paddingRight = gap + "px";
+    var setW = rvTrack.getBoundingClientRect().width;
+    var k = Math.max(1, Math.ceil(window.innerWidth / setW));
+    for (var n = 1; n < k * 2; n++) {
+      rvOriginals.forEach(function (c) {
+        var clone = c.cloneNode(true);
+        if (n >= k) clone.setAttribute("aria-hidden", "true");
+        rvTrack.appendChild(clone);
+      });
+    }
+    if (!reduced) rvTrack.classList.add("rv-ready");
+  }
+  buildReviews();
+  var rvT;
+  addEventListener("resize", function () {
+    clearTimeout(rvT);
+    rvT = setTimeout(function () { if (window.innerWidth !== rvWidth) buildReviews(); }, 250);
+  });
+
+  /* ---------- Pause looping animations while off-screen (saves battery on phones) ---------- */
+  if ("IntersectionObserver" in window) {
+    [".marquee-track", "#ap-track", "#review-track", "#phone-track"].forEach(function (sel) {
+      var el = document.querySelector(sel);
+      if (!el || !el.parentElement) return;
+      new IntersectionObserver(function (en) {
+        el.style.animationPlayState = en[0].isIntersecting ? "" : "paused";
+      }).observe(el.parentElement);
+    });
+  }
 
   /* ---------- Reel player (on-page Instagram embed) ---------- */
   var modal = document.getElementById("reel-modal");
