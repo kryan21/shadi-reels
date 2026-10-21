@@ -557,20 +557,29 @@
             w.appendChild(wi); frag.appendChild(w);
           });
           el.replaceChild(frag, node);
+        } else if (node.nodeType === 1 && node.tagName === "EM") {
+          // Never split inside <em>: its gradient text (background-clip:text) disappears in
+          // Chrome when the glyphs sit inside transformed child spans. Wrap the whole phrase
+          // as ONE masked unit; the gradient lives on the unit itself (.em-unit in CSS).
+          var w = document.createElement("span"); w.className = "w";
+          var wi = document.createElement("span"); wi.className = "wi em-unit";
+          el.replaceChild(w, node);
+          wi.appendChild(node); w.appendChild(wi);
         } else if (node.nodeType === 1) splitWords(node);
       });
     };
     var h1 = document.querySelector(".hero h1");
     if (h1) {
       splitWords(h1);
-      gsap.from(h1.querySelectorAll(".wi"), { yPercent: 115, duration: 0.9, ease: "power3.out", stagger: 0.055, delay: 2.2 });
+      gsap.from(h1.querySelectorAll(".wi"), { yPercent: 115, duration: 0.9, ease: "power3.out", stagger: 0.055, delay: 2.2, onComplete: function () { gsap.set(this.targets(), { clearProps: "transform" }); } });
     }
     if (typeof ScrollTrigger !== "undefined") {
       document.querySelectorAll("section h2").forEach(function (h2) {
         splitWords(h2);
         gsap.from(h2.querySelectorAll(".wi"), {
           yPercent: 115, duration: 0.8, ease: "power3.out", stagger: 0.04,
-          scrollTrigger: { trigger: h2, start: "top 86%" }
+          scrollTrigger: { trigger: h2, start: "top 86%" },
+          onComplete: function () { gsap.set(this.targets(), { clearProps: "transform" }); }
         });
       });
     }
