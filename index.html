@@ -54,6 +54,37 @@
 </head>
 <body>
 
+<div class="preloader" id="preloader" aria-hidden="true">
+  <div class="pre-curtain pre-curtain-l"></div>
+  <div class="pre-curtain pre-curtain-r"></div>
+  <div class="pre-frame"></div>
+  <div class="pre-seam"></div>
+  <div class="pre-petals" aria-hidden="true">
+      <span style="--x:6%;--d:-0s;--t:8.5s;--s:13px"></span>
+      <span style="--x:16%;--d:-2.5s;--t:10s;--s:10px"></span>
+      <span style="--x:27%;--d:-5s;--t:9s;--s:15px"></span>
+      <span style="--x:38%;--d:-1.2s;--t:11s;--s:11px"></span>
+      <span style="--x:49%;--d:-3.8s;--t:8s;--s:14px"></span>
+      <span style="--x:58%;--d:-6.5s;--t:10.5s;--s:10px"></span>
+      <span style="--x:68%;--d:-0.8s;--t:9.5s;--s:13px"></span>
+      <span style="--x:78%;--d:-4.4s;--t:11s;--s:12px"></span>
+      <span style="--x:87%;--d:-2s;--t:8.8s;--s:10px"></span>
+      <span style="--x:94%;--d:-5.6s;--t:10.2s;--s:14px"></span>
+  </div>
+  <div class="pre-core">
+    <p class="pre-over">MUKKZ STUDIO&ensp;PRESENTS</p>
+    <div class="pre-mono">
+      <span class="pre-ring-arc"></span>
+      <img src="assets/logo-white.png" alt="" class="preloader-logo" width="700" height="700">
+    </div>
+    <p class="pre-word"><span style="animation-delay:0.45s">S</span><span style="animation-delay:0.51s">H</span><span style="animation-delay:0.57s">A</span><span style="animation-delay:0.63s">A</span><span style="animation-delay:0.69s">D</span><span style="animation-delay:0.75s">I</span><span class="pre-gap"></span><span style="animation-delay:0.88s">R</span><span style="animation-delay:0.94s">E</span><span style="animation-delay:1.00s">E</span><span style="animation-delay:1.06s">L</span><span style="animation-delay:1.12s">S</span></p>
+    <div class="pre-orn"><i></i><span>✦</span><i></i></div>
+    <p class="pre-sub">DELHI&ensp;—&ensp;DUBAI</p>
+  </div>
+</div>
+
+<div class="scroll-progress" aria-hidden="true"><i id="scroll-progress-fill"></i></div>
+
 <div class="cursor-dot" aria-hidden="true"></div>
 <div class="cursor-ring" aria-hidden="true"></div>
 
@@ -69,7 +100,7 @@
     <a href="#reviews">Reviews</a>
     <a href="#faq">FAQs</a>
   </nav>
-  <a class="header-cta" href="https://wa.me/919266771806?text=Hi%20Shaadi%20Reels!%20I%20want%20a%20quote%20for%20my%20wedding." target="_blank" rel="noopener">Get a Quote</a>
+  <a class="header-cta" href="#enquiry">Get a Quote</a>
   <button class="nav-toggle" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button>
 </header>
 
@@ -88,7 +119,7 @@
       <p class="hero-sub reveal">Your wedding. Your story. Stored in reels by us. Same-day wedding reels, raw BTS and candid moments — shot for the feed, delivered while the celebration is still alive.</p>
       <div class="hero-ctas reveal">
         <a href="#reels" class="btn btn-gold">▶&ensp;Watch Reels</a>
-        <a href="https://wa.me/919266771806?text=Hi%20Shaadi%20Reels!%20I%20want%20a%20quote%20for%20my%20wedding." target="_blank" rel="noopener" class="btn btn-ghost">Get a Quote on WhatsApp</a>
+        <a href="#enquiry" class="btn btn-ghost">Get a Quote</a>
       </div>
       <div class="hero-stats reveal" role="list" aria-label="Shaadi Reels in numbers">
         <div role="listitem"><strong><span class="counter" data-count="21">0</span></strong><span>Bollywood films</span></div>
@@ -128,6 +159,18 @@
 </div>
 
 
+
+<!-- ============ STORIES ROW ============ -->
+<section class="stories-row" aria-label="Wedding story highlights">
+  <div class="container stories-inner">
+    <button class="story-chip" type="button" data-open-reel="https://www.instagram.com/shaadireelsofficial/reel/DIadNsvT1w5/"><span class="story-ring"><img src="assets/poster-couple-reel.jpg" alt="" loading="lazy"></span><span>Weddings</span></button>
+    <button class="story-chip" type="button" data-open-reel="https://www.instagram.com/shaadireelsofficial/reel/DeMuArOTrsh/"><span class="story-ring"><img src="assets/poster-bridal-entry.jpg" alt="" loading="lazy"></span><span>Brides</span></button>
+    <button class="story-chip" type="button" data-open-reel="https://www.instagram.com/shaadireelsofficial/reel/DPzLfmSjM3F/"><span class="story-ring"><img src="assets/poster-family-mob-dance.jpg" alt="" loading="lazy"></span><span>Celebrations</span></button>
+    <button class="story-chip" type="button" data-open-reel="https://www.instagram.com/shaadireelsofficial/reel/DWbkuJQk5b1/"><span class="story-ring"><img src="assets/poster-itc-grand-goa.jpg" alt="" loading="lazy"></span><span>Destinations</span></button>
+    <a class="story-chip" href="#reviews"><span class="story-ring"><img src="assets/bride-reception.jpg" alt="" loading="lazy"></span><span>Reviews</span></a>
+  </div>
+</section>
+
 <!-- ============ REELS STRIP ============ -->
 <!-- Cards open the full reel in an on-page player (Instagram embed). Each card (and each hero-phone card) auto-plays a muted,
      looping preview from its data-video file in assets/reels/ while on screen. If a file is missing the still image stays. -->
@@ -138,12 +181,20 @@
   </div>
   <div class="autoplay-viewport">
     <div class="autoplay-track" id="ap-track">
-      <a class="ap-card" href="https://www.instagram.com/shaadireelsofficial/reel/DIadNsvT1w5/" data-video="assets/reels/couple-reel.mp4" target="_blank" rel="noopener" aria-label="Play reel: Couple Reel — Sachin &amp; Aarti"><span class="ap-media"><img src="assets/hero-main.jpg" alt="Couple reel of Sachin and Aarti" loading="lazy"><span class="ap-badge">▶ Reel</span><span class="ap-progress"><i style="animation-duration:7s"></i></span></span><span class="ap-label">Couple Reel — Sachin &amp; Aarti</span></a>
-      <a class="ap-card" href="https://www.instagram.com/shaadireelsofficial/reel/DPzLfmSjM3F/" data-video="assets/reels/family-mob-dance.mp4" target="_blank" rel="noopener" aria-label="Play reel: Family Mob-Dance — Corbett"><span class="ap-media"><img src="assets/family-groom.jpg" alt="Family mob-dance at a golden jubilee in Jim Corbett" loading="lazy"><span class="ap-badge">▶ Reel</span><span class="ap-progress"><i style="animation-duration:9s"></i></span></span><span class="ap-label">Family Mob-Dance — Corbett</span></a>
-      <a class="ap-card" href="https://www.instagram.com/shaadireelsofficial/reel/DWbkuJQk5b1/" data-video="assets/reels/itc-grand-goa.mp4" target="_blank" rel="noopener" aria-label="Play reel: Luxury Wedding — ITC Grand Goa"><span class="ap-media"><img src="assets/couple-mandap.jpg" alt="Luxury wedding at ITC Grand Goa" loading="lazy"><span class="ap-badge">▶ Reel</span><span class="ap-progress"><i style="animation-duration:8s"></i></span></span><span class="ap-label">Luxury Wedding — ITC Grand Goa</span></a>
-      <a class="ap-card" href="https://www.instagram.com/paisdewan/reel/DYY-GWlxBbC/" data-video="assets/reels/bidaai.mp4" target="_blank" rel="noopener" aria-label="Play reel: Bidaai — #PaisDeWan"><span class="ap-media"><img src="assets/hero-2.jpg" alt="Emotional bidaai moment from the PaisDeWan wedding" loading="lazy"><span class="ap-badge">▶ Reel</span><span class="ap-progress"><i style="animation-duration:10s"></i></span></span><span class="ap-label">Bidaai — #PaisDeWan</span></a>
-      <a class="ap-card" href="https://www.instagram.com/shaadireelsofficial/reel/DTscOlSCNwq/" data-video="assets/reels/reception-afterparty.mp4" target="_blank" rel="noopener" aria-label="Play reel: Reception After-Party"><span class="ap-media"><img src="assets/bride-reception.jpg" alt="Reception after-party on the dance floor" loading="lazy"><span class="ap-badge">▶ Reel</span><span class="ap-progress"><i style="animation-duration:7.5s"></i></span></span><span class="ap-label">Reception After-Party</span></a>
-      <a class="ap-card" href="https://www.instagram.com/pksuriworldwidestudios/reel/DWniX6hgfxk/" data-video="assets/reels/st-regis.mp4" target="_blank" rel="noopener" aria-label="Play reel: Pallavi &amp; Vishal — St. Regis"><span class="ap-media"><img src="assets/couple-portrait.jpg" alt="Pallavi and Vishal at St. Regis Mumbai" loading="lazy"><span class="ap-badge">▶ Reel</span><span class="ap-progress"><i style="animation-duration:8.5s"></i></span></span><span class="ap-label">Pallavi &amp; Vishal — St. Regis</span></a>
+      <a class="ap-card" href="https://www.instagram.com/shaadireelsofficial/reel/DIadNsvT1w5/" data-video="assets/reels/couple-reel.mp4" target="_blank" rel="noopener" aria-label="Play reel: Couple Reel — Sachin &amp; Aarti"><span class="ap-media"><img src="assets/poster-couple-reel.jpg" alt="Couple reel of Sachin and Aarti celebrating under a floral mandap" loading="lazy"><span class="ap-badge">▶ Reel</span><span class="ap-progress"><i style="animation-duration:7s"></i></span></span><span class="ap-label">Couple Reel — Sachin &amp; Aarti</span></a>
+      <a class="ap-card" href="https://www.instagram.com/shaadireelsofficial/reel/DPzLfmSjM3F/" data-video="assets/reels/family-mob-dance.mp4" target="_blank" rel="noopener" aria-label="Play reel: Family Mob-Dance — Golden Jubilee, Corbett"><span class="ap-media"><img src="assets/poster-family-mob-dance.jpg" alt="Family mob dance at the golden jubilee celebration of Simi and Pankaj in Jim Corbett" loading="lazy"><span class="ap-badge">▶ Reel</span><span class="ap-progress"><i style="animation-duration:9s"></i></span></span><span class="ap-label">Family Mob-Dance — Golden Jubilee, Corbett</span></a>
+      <a class="ap-card" href="https://www.instagram.com/shaadireelsofficial/reel/DWbkuJQk5b1/" data-video="assets/reels/itc-grand-goa.mp4" target="_blank" rel="noopener" aria-label="Play reel: Luxury Wedding — ITC Grand Goa"><span class="ap-media"><img src="assets/poster-itc-grand-goa.jpg" alt="Luxury wedding celebration at ITC Grand Goa" loading="lazy"><span class="ap-badge">▶ Reel</span><span class="ap-progress"><i style="animation-duration:8s"></i></span></span><span class="ap-label">Luxury Wedding — ITC Grand Goa</span></a>
+      <a class="ap-card" href="https://www.instagram.com/paisdewan/reel/DYY-GWlxBbC/" data-video="assets/reels/bidaai.mp4" target="_blank" rel="noopener" aria-label="Play reel: Bidaai — Sanah Dewan · #PaisDeWan"><span class="ap-media"><img src="assets/poster-bidaai.jpg" alt="Emotional bidaai moment of bride Sanah Dewan" loading="lazy"><span class="ap-badge">▶ Reel</span><span class="ap-progress"><i style="animation-duration:10s"></i></span></span><span class="ap-label">Bidaai — Sanah Dewan · #PaisDeWan</span></a>
+      <a class="ap-card" href="https://www.instagram.com/shaadireelsofficial/reel/DTscOlSCNwq/" data-video="assets/reels/reception-afterparty.mp4" target="_blank" rel="noopener" aria-label="Play reel: Reception After-Party Dance Floor"><span class="ap-media"><img src="assets/poster-reception-afterparty.jpg" alt="Reception after-party dance floor at night" loading="lazy"><span class="ap-badge">▶ Reel</span><span class="ap-progress"><i style="animation-duration:7.5s"></i></span></span><span class="ap-label">Reception After-Party Dance Floor</span></a>
+      <a class="ap-card" href="https://www.instagram.com/shaadireelsofficial/reel/DeMuArOTrsh/" data-video="assets/reels/bridal-entry.mp4" target="_blank" rel="noopener" aria-label="Play reel: Bridal Entry Songs"><span class="ap-media"><img src="assets/poster-bridal-entry.jpg" alt="Bride making her grand entry" loading="lazy"><span class="ap-badge">▶ Reel</span><span class="ap-progress"><i style="animation-duration:8.5s"></i></span></span><span class="ap-label">Bridal Entry Songs</span></a>
+      <a class="ap-card" href="https://www.instagram.com/paisdewan/reel/DWlM9DqEXEI/" data-video="assets/reels/friends-musical.mp4" target="_blank" rel="noopener" aria-label="Play reel: Friends' Musical Performance — The Roseate"><span class="ap-media"><img src="assets/poster-friends-musical.jpg" alt="Friends performing a musical act at The Roseate wedding celebration" loading="lazy"><span class="ap-badge">▶ Reel</span><span class="ap-progress"><i style="animation-duration:7.5s"></i></span></span><span class="ap-label">Friends' Musical Performance — The Roseate</span></a>
+      <a class="ap-card" href="https://www.instagram.com/pksuriworldwidestudios/reel/DWniX6hgfxk/" data-video="assets/reels/st-regis.mp4" target="_blank" rel="noopener" aria-label="Play reel: Pallavi &amp; Vishal — St. Regis Mumbai"><span class="ap-media"><img src="assets/poster-st-regis.jpg" alt="Pallavi and Vishal couple lookbook at St. Regis Mumbai" loading="lazy"><span class="ap-badge">▶ Reel</span><span class="ap-progress"><i style="animation-duration:9.5s"></i></span></span><span class="ap-label">Pallavi &amp; Vishal — St. Regis Mumbai</span></a>
+      <a class="ap-card" href="https://www.instagram.com/paisdewan/reel/DX321bvRGdU/" data-video="assets/reels/joota-chupai.mp4" target="_blank" rel="noopener" aria-label="Play reel: Joota Chupai — #PaisDeWan"><span class="ap-media"><img src="assets/poster-joota-chupai.jpg" alt="Joota chupai ritual fun during the PaisDeWan wedding" loading="lazy"><span class="ap-badge">▶ Reel</span><span class="ap-progress"><i style="animation-duration:8s"></i></span></span><span class="ap-label">Joota Chupai — #PaisDeWan</span></a>
+      <a class="ap-card" href="https://www.instagram.com/paisdewan/reel/DYbcPE-RI8L/" data-video="assets/reels/emotional-moment.mp4" target="_blank" rel="noopener" aria-label="Play reel: An Emotional Couple Moment — #PaisDeWan"><span class="ap-media"><img src="assets/poster-emotional-moment.jpg" alt="Emotional couple moment from the PaisDeWan wedding" loading="lazy"><span class="ap-badge">▶ Reel</span><span class="ap-progress"><i style="animation-duration:10s"></i></span></span><span class="ap-label">An Emotional Couple Moment — #PaisDeWan</span></a>
+      <a class="ap-card" href="https://www.instagram.com/pksuriworldwidestudios/reel/DWleuo5gWba/" data-video="assets/reels/love-story.mp4" target="_blank" rel="noopener" aria-label="Play reel: B&amp;W to Colour Love Story — St. Regis Mumbai"><span class="ap-media"><img src="assets/poster-love-story.jpg" alt="Pallavi and Vishal black and white to colour love story at St. Regis Mumbai" loading="lazy"><span class="ap-badge">▶ Reel</span><span class="ap-progress"><i style="animation-duration:7s"></i></span></span><span class="ap-label">B&amp;W to Colour Love Story — St. Regis Mumbai</span></a>
+      <a class="ap-card" href="https://www.instagram.com/shaadireelsofficial/reel/DXMXgv3k1FI/" data-video="assets/reels/live-band.mp4" target="_blank" rel="noopener" aria-label="Play reel: Live-Band Wedding Night — #PaisDeWan"><span class="ap-media"><img src="assets/poster-live-band.jpg" alt="Live band performing at the PaisDeWan wedding celebration" loading="lazy"><span class="ap-badge">▶ Reel</span><span class="ap-progress"><i style="animation-duration:9s"></i></span></span><span class="ap-label">Live-Band Wedding Night — #PaisDeWan</span></a>
+      <a class="ap-card" href="https://www.instagram.com/shaadireelsofficial/reel/DWvZdHXk9Xa/" data-video="assets/reels/groom-entry.mp4" target="_blank" rel="noopener" aria-label="Play reel: The Groom's Grand Entry"><span class="ap-media"><img src="assets/poster-groom-entry.jpg" alt="Groom making his grand entry at the wedding" loading="lazy"><span class="ap-badge">▶ Reel</span><span class="ap-progress"><i style="animation-duration:8s"></i></span></span><span class="ap-label">The Groom's Grand Entry</span></a>
+      <a class="ap-card" href="https://www.instagram.com/paisdewan/reel/DYG_YK9Rkzc/" data-video="assets/reels/paisdewan-mehndi.mp4" target="_blank" rel="noopener" aria-label="Play reel: Mehndi Moments — #PaisDeWan"><span class="ap-media"><img src="assets/poster-paisdewan-mehndi.jpg" alt="Mehndi celebration moments from the PaisDeWan wedding" loading="lazy"><span class="ap-badge">▶ Reel</span><span class="ap-progress"><i style="animation-duration:9.5s"></i></span></span><span class="ap-label">Mehndi Moments — #PaisDeWan</span></a>
     </div>
   </div>
 </section>
@@ -213,68 +264,78 @@
   <div class="container">
     <p class="eyebrow light reveal">Curated gallery · @shaadireelsofficial</p>
     <h2 class="reveal">The reels everyone <em>replayed</em></h2>
-    <p class="section-sub light reveal">Our most-loved wedding reels on Instagram — the ones couples, families and guests replayed again and again. Tap any reel to play it right here.</p>
+    <p class="section-sub light reveal">Our most-loved wedding reels on Instagram — every card below is a different reel, playing a live preview as you scroll. Tap any reel to watch it in full, right here.</p>
 
     <div class="reel-grid">
-      <a class="reel-card tilt reveal" href="https://www.instagram.com/shaadireelsofficial/reel/DIadNsvT1w5/" target="_blank" rel="noopener">
-        <img src="assets/hero-main.jpg" alt="Couple reel of Sachin and Aarti celebrating under a floral mandap" loading="lazy">
+      <a class="reel-card tilt reveal" href="https://www.instagram.com/shaadireelsofficial/reel/DIadNsvT1w5/" data-video="assets/reels/couple-reel.mp4" target="_blank" rel="noopener">
+        <img src="assets/poster-couple-reel.jpg" alt="Couple reel of Sachin and Aarti celebrating under a floral mandap" loading="lazy">
         <span class="reel-play" aria-hidden="true">▶</span>
-        <span class="reel-meta"><strong>Couple Reel — Sachin &amp; Aarti</strong></span>
+        <span class="reel-meta"><strong>Couple Reel — Sachin & Aarti</strong></span>
       </a>
-      <a class="reel-card tilt reveal" href="https://www.instagram.com/shaadireelsofficial/reel/DPzLfmSjM3F/" target="_blank" rel="noopener">
-        <img src="assets/family-groom.jpg" alt="Family mob dance at the golden jubilee celebration of Simi and Pankaj in Jim Corbett" loading="lazy">
+      <a class="reel-card tilt reveal" href="https://www.instagram.com/shaadireelsofficial/reel/DPzLfmSjM3F/" data-video="assets/reels/family-mob-dance.mp4" target="_blank" rel="noopener">
+        <img src="assets/poster-family-mob-dance.jpg" alt="Family mob dance at the golden jubilee celebration of Simi and Pankaj in Jim Corbett" loading="lazy">
         <span class="reel-play" aria-hidden="true">▶</span>
         <span class="reel-meta"><strong>Family Mob-Dance — Golden Jubilee, Corbett</strong></span>
       </a>
-      <a class="reel-card tilt reveal" href="https://www.instagram.com/shaadireelsofficial/reel/DWbkuJQk5b1/" target="_blank" rel="noopener">
-        <img src="assets/couple-mandap.jpg" alt="Luxury wedding celebration at ITC Grand Goa" loading="lazy">
+      <a class="reel-card tilt reveal" href="https://www.instagram.com/shaadireelsofficial/reel/DWbkuJQk5b1/" data-video="assets/reels/itc-grand-goa.mp4" target="_blank" rel="noopener">
+        <img src="assets/poster-itc-grand-goa.jpg" alt="Luxury wedding celebration at ITC Grand Goa" loading="lazy">
         <span class="reel-play" aria-hidden="true">▶</span>
         <span class="reel-meta"><strong>Luxury Wedding — ITC Grand Goa</strong></span>
       </a>
-      <a class="reel-card tilt reveal" href="https://www.instagram.com/paisdewan/reel/DYY-GWlxBbC/" target="_blank" rel="noopener">
-        <img src="assets/hero-2.jpg" alt="Emotional bidaai moment of bride Sanah Dewan" loading="lazy">
+      <a class="reel-card tilt reveal" href="https://www.instagram.com/paisdewan/reel/DYY-GWlxBbC/" data-video="assets/reels/bidaai.mp4" target="_blank" rel="noopener">
+        <img src="assets/poster-bidaai.jpg" alt="Emotional bidaai moment of bride Sanah Dewan" loading="lazy">
         <span class="reel-play" aria-hidden="true">▶</span>
         <span class="reel-meta"><strong>Bidaai — Sanah Dewan · #PaisDeWan</strong></span>
       </a>
-      <a class="reel-card tilt reveal" href="https://www.instagram.com/shaadireelsofficial/reel/DTscOlSCNwq/" target="_blank" rel="noopener">
-        <img src="assets/bride-reception.jpg" alt="Reception after-party dance floor at night" loading="lazy">
+      <a class="reel-card tilt reveal" href="https://www.instagram.com/shaadireelsofficial/reel/DTscOlSCNwq/" data-video="assets/reels/reception-afterparty.mp4" target="_blank" rel="noopener">
+        <img src="assets/poster-reception-afterparty.jpg" alt="Reception after-party dance floor at night" loading="lazy">
         <span class="reel-play" aria-hidden="true">▶</span>
         <span class="reel-meta"><strong>Reception After-Party Dance Floor</strong></span>
       </a>
-      <a class="reel-card tilt reveal" href="https://www.instagram.com/shaadireelsofficial/reel/DeMuArOTrsh/" target="_blank" rel="noopener">
-        <img src="assets/couple-portrait.jpg" alt="Bride making her grand entry — bridal entry songs reel" loading="lazy">
+      <a class="reel-card tilt reveal" href="https://www.instagram.com/shaadireelsofficial/reel/DeMuArOTrsh/" data-video="assets/reels/bridal-entry.mp4" target="_blank" rel="noopener">
+        <img src="assets/poster-bridal-entry.jpg" alt="Bride making her grand entry" loading="lazy">
         <span class="reel-play" aria-hidden="true">▶</span>
         <span class="reel-meta"><strong>Bridal Entry Songs</strong></span>
       </a>
-      <a class="reel-card tilt reveal" href="https://www.instagram.com/paisdewan/reel/DWlM9DqEXEI/" target="_blank" rel="noopener">
-        <img src="assets/family-groom.jpg" alt="Friends performing a musical act at The Roseate wedding celebration" loading="lazy" style="object-position:top">
+      <a class="reel-card tilt reveal" href="https://www.instagram.com/paisdewan/reel/DWlM9DqEXEI/" data-video="assets/reels/friends-musical.mp4" target="_blank" rel="noopener">
+        <img src="assets/poster-friends-musical.jpg" alt="Friends performing a musical act at The Roseate wedding celebration" loading="lazy">
         <span class="reel-play" aria-hidden="true">▶</span>
         <span class="reel-meta"><strong>Friends' Musical Performance — The Roseate</strong></span>
       </a>
-      <a class="reel-card tilt reveal" href="https://www.instagram.com/pksuriworldwidestudios/reel/DWniX6hgfxk/" target="_blank" rel="noopener">
-        <img src="assets/couple-portrait.jpg" alt="Pallavi and Vishal couple lookbook at St. Regis Mumbai" loading="lazy" style="object-position:top">
+      <a class="reel-card tilt reveal" href="https://www.instagram.com/pksuriworldwidestudios/reel/DWniX6hgfxk/" data-video="assets/reels/st-regis.mp4" target="_blank" rel="noopener">
+        <img src="assets/poster-st-regis.jpg" alt="Pallavi and Vishal couple lookbook at St. Regis Mumbai" loading="lazy">
         <span class="reel-play" aria-hidden="true">▶</span>
         <span class="reel-meta"><strong>Pallavi &amp; Vishal — St. Regis Mumbai</strong></span>
       </a>
-      <a class="reel-card tilt reveal" href="https://www.instagram.com/paisdewan/reel/DX321bvRGdU/" target="_blank" rel="noopener">
-        <img src="assets/ceremony-seated.jpg" alt="Joota chupai ritual fun during the PaisDeWan wedding" loading="lazy">
+      <a class="reel-card tilt reveal" href="https://www.instagram.com/paisdewan/reel/DX321bvRGdU/" data-video="assets/reels/joota-chupai.mp4" target="_blank" rel="noopener">
+        <img src="assets/poster-joota-chupai.jpg" alt="Joota chupai ritual fun during the PaisDeWan wedding" loading="lazy">
         <span class="reel-play" aria-hidden="true">▶</span>
         <span class="reel-meta"><strong>Joota Chupai — #PaisDeWan</strong></span>
       </a>
-      <a class="reel-card tilt reveal" href="https://www.instagram.com/paisdewan/reel/DYbcPE-RI8L/" target="_blank" rel="noopener">
-        <img src="assets/hero-2.jpg" alt="Emotional couple moment from the PaisDeWan wedding" loading="lazy" style="object-position:top">
+      <a class="reel-card tilt reveal" href="https://www.instagram.com/paisdewan/reel/DYbcPE-RI8L/" data-video="assets/reels/emotional-moment.mp4" target="_blank" rel="noopener">
+        <img src="assets/poster-emotional-moment.jpg" alt="Emotional couple moment from the PaisDeWan wedding" loading="lazy">
         <span class="reel-play" aria-hidden="true">▶</span>
         <span class="reel-meta"><strong>An Emotional Couple Moment — #PaisDeWan</strong></span>
       </a>
-      <a class="reel-card tilt reveal" href="https://www.instagram.com/pksuriworldwidestudios/reel/DWleuo5gWba/" target="_blank" rel="noopener">
-        <img src="assets/hero-main.jpg" alt="Pallavi and Vishal black and white to colour love story at St. Regis Mumbai" loading="lazy" style="object-position:top">
+      <a class="reel-card tilt reveal" href="https://www.instagram.com/pksuriworldwidestudios/reel/DWleuo5gWba/" data-video="assets/reels/love-story.mp4" target="_blank" rel="noopener">
+        <img src="assets/poster-love-story.jpg" alt="Pallavi and Vishal black and white to colour love story at St. Regis Mumbai" loading="lazy">
         <span class="reel-play" aria-hidden="true">▶</span>
         <span class="reel-meta"><strong>B&amp;W to Colour Love Story — St. Regis Mumbai</strong></span>
       </a>
-      <a class="reel-card tilt reveal" href="https://www.instagram.com/shaadireelsofficial/reel/DXMXgv3k1FI/" target="_blank" rel="noopener">
-        <img src="assets/bride-reception.jpg" alt="Live band performing at the PaisDeWan wedding celebration" loading="lazy" style="object-position:top">
+      <a class="reel-card tilt reveal" href="https://www.instagram.com/shaadireelsofficial/reel/DXMXgv3k1FI/" data-video="assets/reels/live-band.mp4" target="_blank" rel="noopener">
+        <img src="assets/poster-live-band.jpg" alt="Live band performing at the PaisDeWan wedding celebration" loading="lazy">
         <span class="reel-play" aria-hidden="true">▶</span>
         <span class="reel-meta"><strong>Live-Band Wedding Night — #PaisDeWan</strong></span>
+      </a>
+      <a class="reel-card tilt reveal" href="https://www.instagram.com/shaadireelsofficial/reel/DWvZdHXk9Xa/" data-video="assets/reels/groom-entry.mp4" target="_blank" rel="noopener">
+        <img src="assets/poster-groom-entry.jpg" alt="Groom making his grand entry at the wedding" loading="lazy">
+        <span class="reel-play" aria-hidden="true">▶</span>
+        <span class="reel-meta"><strong>The Groom's Grand Entry</strong></span>
+      </a>
+      <a class="reel-card tilt reveal" href="https://www.instagram.com/paisdewan/reel/DYG_YK9Rkzc/" data-video="assets/reels/paisdewan-mehndi.mp4" target="_blank" rel="noopener">
+        <img src="assets/poster-paisdewan-mehndi.jpg" alt="Mehndi celebration moments from the PaisDeWan wedding" loading="lazy">
+        <span class="reel-play" aria-hidden="true">▶</span>
+        <span class="reel-meta"><strong>Mehndi Moments — #PaisDeWan</strong></span>
       </a>
     </div>
     <p class="reel-follow reveal"><a class="btn btn-gold" href="https://www.instagram.com/shaadireelsofficial" target="_blank" rel="noopener">Follow @shaadireelsofficial&ensp;↗</a></p>
@@ -374,7 +435,7 @@
             <li>Unedited data in 24 hours</li>
             <li>Edited content in 48 hours</li>
           </ul>
-          <a class="btn btn-dark pkg-quote" href="https://wa.me/919266771806?text=Hi%20Shaadi%20Reels!%20Please%20quote%20the%20Signature%20package%20(India)%20for%20my%20wedding." target="_blank" rel="noopener">Get a Quote</a>
+          <a class="btn btn-dark pkg-quote" href="#enquiry" data-package="Signature (India)">Get a Quote</a>
         </article>
         <article class="pkg-card featured reveal">
           <span class="pkg-badge">Most Loved</span>
@@ -387,7 +448,7 @@
             <li>Unedited data in 24 hours</li>
             <li>Edited content in 72 hours</li>
           </ul>
-          <a class="btn btn-gold pkg-quote" href="https://wa.me/919266771806?text=Hi%20Shaadi%20Reels!%20Please%20quote%20the%20Platinum%20package%20(India)%20for%20my%20wedding." target="_blank" rel="noopener">Get a Quote</a>
+          <a class="btn btn-gold pkg-quote" href="#enquiry" data-package="Platinum (India)">Get a Quote</a>
         </article>
         <article class="pkg-card reveal">
           <h3>Platinum+</h3><p class="pkg-tag">Two days. Every moment.</p>
@@ -399,7 +460,7 @@
             <li>Unedited data in 24 hours</li>
             <li>Edited content in 96 hours</li>
           </ul>
-          <a class="btn btn-dark pkg-quote" href="https://wa.me/919266771806?text=Hi%20Shaadi%20Reels!%20Please%20quote%20the%20Platinum%2B%20package%20(India)%20for%20my%20wedding." target="_blank" rel="noopener">Get a Quote</a>
+          <a class="btn btn-dark pkg-quote" href="#enquiry" data-package="Platinum+ (India)">Get a Quote</a>
         </article>
       </div>
       <div class="addons reveal">
@@ -426,7 +487,7 @@
             <li>Unedited data in 24 hours</li>
             <li>Edited content in 48 hours</li>
           </ul>
-          <a class="btn btn-dark pkg-quote" href="https://wa.me/971507298608?text=Hi%20Shaadi%20Reels%20Dubai!%20Please%20quote%20the%20Signature%20package%20for%20my%20wedding." target="_blank" rel="noopener">Get a Quote</a>
+          <a class="btn btn-dark pkg-quote" href="#enquiry" data-package="Signature (Dubai)">Get a Quote</a>
         </article>
         <article class="pkg-card featured reveal">
           <span class="pkg-badge">Most Loved</span>
@@ -439,7 +500,7 @@
             <li>Unedited data in 24 hours</li>
             <li>Edited content in 72 hours</li>
           </ul>
-          <a class="btn btn-gold pkg-quote" href="https://wa.me/971507298608?text=Hi%20Shaadi%20Reels%20Dubai!%20Please%20quote%20the%20Platinum%20package%20for%20my%20wedding." target="_blank" rel="noopener">Get a Quote</a>
+          <a class="btn btn-gold pkg-quote" href="#enquiry" data-package="Platinum (Dubai)">Get a Quote</a>
         </article>
         <article class="pkg-card reveal">
           <h3>Platinum+</h3><p class="pkg-tag">Two shifts. Complete coverage.</p>
@@ -451,7 +512,7 @@
             <li>Unedited data in 24 hours</li>
             <li>Edited content in 96 hours</li>
           </ul>
-          <a class="btn btn-dark pkg-quote" href="https://wa.me/971507298608?text=Hi%20Shaadi%20Reels%20Dubai!%20Please%20quote%20the%20Platinum%2B%20package%20for%20my%20wedding." target="_blank" rel="noopener">Get a Quote</a>
+          <a class="btn btn-dark pkg-quote" href="#enquiry" data-package="Platinum+ (Dubai)">Get a Quote</a>
         </article>
       </div>
       <div class="addons reveal">
