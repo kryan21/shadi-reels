@@ -258,12 +258,11 @@ h2 em,h1 em{font-style:italic;background:var(--grad);-webkit-background-clip:tex
 .site-footer a:hover{color:var(--gold)}
 .copyright{text-align:center;margin-top:3.5rem;padding-top:1.5rem;border-top:1px solid rgba(217,164,65,.25);font-size:.85rem;color:#b89d83}
 
-/* floating quote button (mobile only): scrolls to the enquiry form */
-.float-quote{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom));z-index:950;width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;background:var(--grad);box-shadow:0 10px 26px rgba(90,10,18,.45),inset 0 0 0 1.5px rgba(246,217,160,.65);transition:transform .25s ease}
-.float-quote:active{transform:scale(.93)}
-.float-quote::after{content:"";position:absolute;inset:0;border-radius:50%;border:1.5px solid rgba(217,164,65,.7);animation:fqPulse 2.4s ease-out infinite;pointer-events:none}
-@keyframes fqPulse{0%{transform:scale(1);opacity:.85}70%{transform:scale(1.45);opacity:0}100%{transform:scale(1.45);opacity:0}}
-@media(min-width:821px){.float-quote{display:none}}
+/* sticky mobile CTA */
+.sticky-cta{position:fixed;left:0;right:0;bottom:0;z-index:950;display:none;grid-template-columns:1fr 1fr;box-shadow:0 -8px 30px rgba(0,0,0,.25)}
+.sticky-cta a{padding:1rem;text-align:center;font-weight:600;color:#fff}
+.sticky-wa{background:#1faa55}
+.sticky-quote{background:var(--grad)}
 
 /* reveal default (JS animates in) */
 .reveal{opacity:1}
@@ -289,6 +288,8 @@ h2 em,h1 em{font-style:italic;background:var(--grad);-webkit-background-clip:tex
   .about-grid,.planners-grid,.enquiry-grid,.dest-grid{grid-template-columns:1fr}
   .stats-grid{grid-template-columns:1fr 1fr}
   .photo-slot-frame{min-height:340px}
+  .sticky-cta{display:grid}
+  body{padding-bottom:52px}
   .scroll-hint{display:none}
 }
 @media(max-width:560px){
@@ -417,6 +418,8 @@ html{-webkit-text-size-adjust:100%;-webkit-tap-highlight-color:transparent}
   /* blur is expensive on phones */
   .site-header.scrolled{background:rgba(250,243,231,.98);backdrop-filter:none}
   .hero-badge,.btn-ghost,.reel-play{backdrop-filter:none;-webkit-backdrop-filter:none}
+  .sticky-cta a{padding-bottom:calc(1rem + env(safe-area-inset-bottom))}
+  body{padding-bottom:calc(52px + env(safe-area-inset-bottom))}
   .section{padding:3.6rem 0}
   .hero-badge{font-size:.64rem;letter-spacing:.14em}
   .hero-ctas{margin:1.5rem 0 2rem}
@@ -514,10 +517,3 @@ html{-webkit-text-size-adjust:100%;-webkit-tap-highlight-color:transparent}
 
 /* native video in the reel player (local files, no embed) */
 .reel-modal-frame video{width:100%;height:100%;object-fit:contain;background:#000;display:block}
-
-/* Gradient accent phrases inside animated headlines ride as one unit (.em-unit): the unit
-   itself carries the gradient text — background-clip on the transformed element paints
-   reliably; on an ancestor of transformed spans it vanishes (missing-word bug). */
-.wi.em-unit{background:var(--grad);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
-.wi.em-unit em{background:none;-webkit-background-clip:initial;background-clip:initial;-webkit-text-fill-color:transparent;color:transparent}
-.w:has(.em-unit){padding-right:.12em;margin-right:-.12em}
