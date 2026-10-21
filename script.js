@@ -191,7 +191,13 @@
     var gap = parseFloat(getComputedStyle(apTrack).columnGap) || 16;
     apTrack.style.paddingRight = gap + "px"; // makes each set exactly (cards + gaps) wide
     var setW = apTrack.getBoundingClientRect().width;
-    var k = Math.max(1, Math.ceil(window.innerWidth / setW));
+    if (!(setW > 50)) { // not laid out yet (hidden/zero-size container): keep one set, retry shortly — never divide by ~0
+      if (!buildStrip._retried) { buildStrip._retried = true; setTimeout(buildStrip, 400); }
+      if (!reduced) apTrack.classList.add("ap-ready");
+      apTrack.querySelectorAll(".ap-card[data-video]").forEach(function (c) { attachVideo(c, c.querySelector(".ap-media")); });
+      return;
+    }
+    var k = Math.min(4, Math.max(1, Math.ceil(window.innerWidth / setW)));
     // k sets for the visible half + k identical sets for the second half => translateX(-50%) loops with no jump
     for (var n = 1; n < k * 2; n++) {
       apOriginals.forEach(function (c) {
@@ -228,7 +234,12 @@
     var gap = parseFloat(getComputedStyle(rvTrack).columnGap) || 22;
     rvTrack.style.paddingRight = gap + "px";
     var setW = rvTrack.getBoundingClientRect().width;
-    var k = Math.max(1, Math.ceil(window.innerWidth / setW));
+    if (!(setW > 50)) { // same zero-layout guard as the reel strip
+      if (!buildReviews._retried) { buildReviews._retried = true; setTimeout(buildReviews, 400); }
+      if (!reduced) rvTrack.classList.add("rv-ready");
+      return;
+    }
+    var k = Math.min(4, Math.max(1, Math.ceil(window.innerWidth / setW)));
     for (var n = 1; n < k * 2; n++) {
       rvOriginals.forEach(function (c) {
         var clone = c.cloneNode(true);
@@ -265,17 +276,46 @@
     var m = String(url).match(/\/reel\/([A-Za-z0-9_-]+)/);
     return m ? m[1] : null;
   }
+  var LOCAL_REELS = {
+    DIadNsvT1w5: "couple-reel", DPzLfmSjM3F: "family-mob-dance", DWbkuJQk5b1: "itc-grand-goa",
+    "DYY-GWlxBbC": "bidaai", DTscOlSCNwq: "reception-afterparty", DeMuArOTrsh: "bridal-entry",
+    DWlM9DqEXEI: "friends-musical", DWniX6hgfxk: "st-regis", DX321bvRGdU: "joota-chupai",
+    "DYbcPE-RI8L": "emotional-moment", DWleuo5gWba: "love-story", DXMXgv3k1FI: "live-band",
+    DWvZdHXk9Xa: "groom-entry", "DYG_YK9Rkzc": "paisdewan-mehndi"
+  };
   function openReel(url) {
     var id = reelId(url);
     if (!modal || !id) { window.open(url, "_blank", "noopener"); return; }
     lastFocus = document.activeElement;
     frame.innerHTML = "";
-    var ifr = document.createElement("iframe");
-    ifr.src = "https://www.instagram.com/reel/" + id + "/embed/";
-    ifr.setAttribute("allow", "autoplay; encrypted-media; fullscreen; picture-in-picture");
-    ifr.setAttribute("allowfullscreen", "");
-    ifr.setAttribute("title", "Instagram reel player");
-    frame.appendChild(ifr);
+    var local = LOCAL_REELS[id];
+    if (local) {
+      // Play our own file natively — no Instagram embed, nothing external to hang or freeze.
+      var vid = document.createElement("video");
+      vid.src = "assets/reels/full/" + local + ".mp4";
+      vid.poster = "assets/poster-" + local + ".jpg";
+      vid.controls = true; vid.autoplay = true; vid.playsInline = true;
+      vid.setAttribute("playsinline", "");
+      vid.setAttribute("title", "Shaadi Reels video player");
+      vid.addEventListener("error", function () {
+        // Local file missing: fall back to the Instagram embed for this reel.
+        frame.innerHTML = "";
+        var f2 = document.createElement("iframe");
+        f2.src = "https://www.instagram.com/reel/" + id + "/embed/";
+        f2.setAttribute("allow", "autoplay; encrypted-media; fullscreen; picture-in-picture");
+        f2.setAttribute("allowfullscreen", "");
+        frame.appendChild(f2);
+      }, { once: true });
+      frame.appendChild(vid);
+      var vp = vid.play(); if (vp && vp.catch) vp.catch(function () {});
+    } else {
+      var ifr = document.createElement("iframe");
+      ifr.src = "https://www.instagram.com/reel/" + id + "/embed/";
+      ifr.setAttribute("allow", "autoplay; encrypted-media; fullscreen; picture-in-picture");
+      ifr.setAttribute("allowfullscreen", "");
+      ifr.setAttribute("title", "Instagram reel player");
+      frame.appendChild(ifr);
+    }
     igLink.href = url;
     modal.hidden = false;
     locks.modal = true; applyLock();
@@ -439,5 +479,107 @@
     var number = /Dubai/i.test(String(f.get("package"))) ? "971507298608" : "919266771806";
     var url = "https://wa.me/" + number + "?text=" + encodeURIComponent(lines.join("\n"));
     if (!window.open(url, "_blank")) window.location.href = url; // popup blocked fallback
+  });
+  /* ---------- Enhancement pack: gallery videos, stories, preloader, polish ---------- */
+  // Live video previews inside gallery cards
+  document.querySelectorAll(".reel-card[data-video]").forEach(function (c) { attachVideo(c, c); });
+
+  // Stories row: open the reel in the on-site player
+  document.querySelectorAll("[data-open-reel]").forEach(function (chip) {
+    chip.addEventListener("click", function () { openReel(chip.getAttribute("data-open-reel")); });
+  });
+
+  // Preloader: hide on load (with a minimum moment), never trap the page
+  var pre = document.getElementById("preloader");
+  if (pre) {
+    var preDone = false, preStart = Date.now();
+    var hidePre = function () {
+      if (preDone) return; preDone = true;
+      var wait = Math.max(0, 1950 - (Date.now() - preStart));
+      setTimeout(function () { pre.classList.add("done"); setTimeout(function () { pre.remove(); }, 1500); }, wait);
+    };
+    if (document.readyState === "complete") hidePre();
+    else window.addEventListener("load", hidePre);
+    setTimeout(hidePre, 3600);
+  }
+
+  // Scroll progress bar
+  var fill = document.getElementById("scroll-progress-fill");
+  if (fill) {
+    var onScroll = function () {
+      var max = document.documentElement.scrollHeight - innerHeight;
+      fill.style.width = (max > 0 ? (window.scrollY / max) * 100 : 0) + "%";
+    };
+    window.addEventListener("scroll", onScroll, { passive: true }); onScroll();
+  }
+
+  // Magnetic CTA buttons (desktop)
+  if (finePointer && !reduced) {
+    document.querySelectorAll(".btn, .header-cta").forEach(function (el) {
+      el.addEventListener("mousemove", function (e) {
+        var r = el.getBoundingClientRect();
+        var px = (e.clientX - r.left) / r.width - 0.5, py = (e.clientY - r.top) / r.height - 0.5;
+        el.style.transform = "translate(" + (px * 10) + "px," + (py * 7 - 2) + "px)";
+      });
+      el.addEventListener("mouseleave", function () { el.style.transform = ""; });
+    });
+  }
+
+  // Petal burst on quote / WhatsApp taps
+  if (!reduced) {
+    document.querySelectorAll('a[href*="wa.me"]').forEach(function (a) {
+      a.addEventListener("click", function (e) {
+        var x = e.clientX || innerWidth / 2, y = e.clientY || innerHeight / 2;
+        for (var i = 0; i < 12; i++) {
+          var s = document.createElement("span"); s.className = "petal";
+          s.style.left = x + "px"; s.style.top = y + "px";
+          s.style.setProperty("--dx", (Math.random() * 150 - 75) + "px");
+          s.style.setProperty("--dy", (40 + Math.random() * 90) + "px");
+          s.style.setProperty("--rot", (Math.random() * 320 - 160) + "deg");
+          document.body.appendChild(s);
+          (function (el) { setTimeout(function () { el.remove(); }, 1000); })(s);
+        }
+      });
+    });
+  }
+
+  // Headline word-by-word rise
+  if (typeof gsap !== "undefined" && !reduced) {
+    var splitWords = function (el) {
+      Array.prototype.slice.call(el.childNodes).forEach(function (node) {
+        if (node.nodeType === 3) {
+          var frag = document.createDocumentFragment();
+          node.textContent.split(/(\s+)/).forEach(function (part) {
+            if (!part) return;
+            if (/^\s+$/.test(part)) { frag.appendChild(document.createTextNode(" ")); return; }
+            var w = document.createElement("span"); w.className = "w";
+            var wi = document.createElement("span"); wi.className = "wi"; wi.textContent = part;
+            w.appendChild(wi); frag.appendChild(w);
+          });
+          el.replaceChild(frag, node);
+        } else if (node.nodeType === 1) splitWords(node);
+      });
+    };
+    var h1 = document.querySelector(".hero h1");
+    if (h1) {
+      splitWords(h1);
+      gsap.from(h1.querySelectorAll(".wi"), { yPercent: 115, duration: 0.9, ease: "power3.out", stagger: 0.055, delay: 2.2 });
+    }
+    if (typeof ScrollTrigger !== "undefined") {
+      document.querySelectorAll("section h2").forEach(function (h2) {
+        splitWords(h2);
+        gsap.from(h2.querySelectorAll(".wi"), {
+          yPercent: 115, duration: 0.8, ease: "power3.out", stagger: 0.04,
+          scrollTrigger: { trigger: h2, start: "top 86%" }
+        });
+      });
+    }
+  }
+  // Package "Get a Quote" buttons: pre-select that package in the enquiry form
+  document.querySelectorAll(".pkg-quote[data-package]").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var sel = document.querySelector('#enquiry-form select[name="package"]');
+      if (sel) sel.value = btn.getAttribute("data-package");
+    });
   });
 })();
