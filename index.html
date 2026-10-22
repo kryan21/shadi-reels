@@ -653,6 +653,17 @@ a,button,label,select{touch-action:manipulation}
   .stories-inner{gap:.8rem}
   .story-chip{font-size:.72rem;letter-spacing:.02em}
 }
+
+/* ===== Mobile fixes r6 ===== */
+.phone-track.is-looping{animation-duration:22s}
+.phone-card video,.ap-media video,.reel-card video{background:transparent;opacity:0;transition:opacity .35s ease}
+.phone-card video.is-live,.ap-media video.is-live,.reel-card video.is-live{opacity:1}
+@media(max-width:820px){
+  .autoplay-viewport,.review-viewport{-webkit-mask-image:none;mask-image:none}
+  .hero-img{top:0;height:100%}
+  .hero{min-height:100dvh}
+  .phone-screen,.ap-media{-webkit-transform:translateZ(0);transform:translateZ(0);-webkit-backface-visibility:hidden;backface-visibility:hidden}
+}
 </style>
 <script type="application/ld+json">
 {
@@ -1324,41 +1335,60 @@ a,button,label,select{touch-action:manipulation}
   var finePointer = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
   var isMobile = window.innerWidth < 821;
 
-  /* ---------- Muted autoplay previews (works on mobile: muted + playsinline) ---------- */
+  /* ---------- Muted autoplay previews: only on-screen cards hold a video ---------- */
   var saveData = navigator.connection && navigator.connection.saveData;
-  var visibleVideos = [];
+  var MAX_LIVE = isMobile ? 4 : 8;
+  var liveVids = [], allHosts = [];
   function tryPlay(v) { var p = v.play(); if (p && p.catch) p.catch(function () {}); }
-  var videoIO = (!reduced && !saveData && "IntersectionObserver" in window)
-    ? new IntersectionObserver(function (entries) {
-        entries.forEach(function (en) {
-          var v = en.target, i = visibleVideos.indexOf(v);
-          if (en.isIntersecting) { if (i < 0) visibleVideos.push(v); tryPlay(v); }
-          else { if (i >= 0) visibleVideos.splice(i, 1); v.pause(); }
-        });
-      }, { threshold: 0.2 })
-    : null;
-  // iOS Low Power Mode / strict browsers block autoplay until the first touch — retry then
-  ["touchstart", "pointerdown", "scroll"].forEach(function (ev) {
-    window.addEventListener(ev, function () {
-      visibleVideos.forEach(function (v) { if (v.paused) tryPlay(v); });
-    }, { passive: true, once: ev !== "scroll" });
-  });
-  function attachVideo(host, media) {
-    var src = host && host.getAttribute("data-video");
-    if (!videoIO || !src || !media || media.querySelector("video")) return;
-    var img = media.querySelector("img");
+  function mountVideo(host) {
+    if (host._vid || liveVids.length >= MAX_LIVE) return;
+    var media = host._media, img = media.querySelector("img");
     var v = document.createElement("video");
-    v.muted = true; v.loop = true; v.playsInline = true; v.preload = "none";
-    v.setAttribute("muted", ""); v.setAttribute("playsinline", ""); v.setAttribute("webkit-playsinline", "");
+    v.muted = true; v.defaultMuted = true; v.loop = true; v.playsInline = true; v.autoplay = true;
+    v.preload = "auto"; v.disableRemotePlayback = true;
+    ["muted", "playsinline", "webkit-playsinline", "autoplay"].forEach(function (a) { v.setAttribute(a, ""); });
     v.setAttribute("aria-hidden", "true"); v.tabIndex = -1;
     if (img) v.poster = img.getAttribute("src");
-    v.src = src;
-    v.addEventListener("playing", function () { if (img) img.style.animation = "none"; });
-    v.addEventListener("loadeddata", function () { if (visibleVideos.indexOf(v) > -1) tryPlay(v); });
-    v.addEventListener("error", function () { console.warn("[reels] could not load video:", v.currentSrc || v.src); videoIO.unobserve(v); v.remove(); }); // missing file: keep the still image
+    v.src = host.getAttribute("data-video");
+    v.addEventListener("playing", function () { v.classList.add("is-live"); if (img) img.style.animation = "none"; });
+    v.addEventListener("canplay", function () { if (host._vis) tryPlay(v); });
+    v.addEventListener("pause", function () {
+      setTimeout(function () { if (host._vis && host._vid === v && v.paused && !document.hidden) tryPlay(v); }, 400);
+    });
+    v.addEventListener("error", function () { console.warn("[reels] could not load video:", v.currentSrc || v.src); unmountVideo(host); host._dead = true; });
     media.insertBefore(v, img ? img.nextSibling : media.firstChild);
-    videoIO.observe(v);
+    host._vid = v; liveVids.push(v);
+    tryPlay(v);
   }
+  function unmountVideo(host) {
+    var v = host._vid; if (!v) return;
+    host._vid = null;
+    var i = liveVids.indexOf(v); if (i > -1) liveVids.splice(i, 1);
+    v.pause(); v.removeAttribute("src"); v.load(); v.remove();
+    var img = host._media.querySelector("img"); if (img) img.style.animation = "";
+  }
+  var hostIO = (!reduced && !saveData && "IntersectionObserver" in window)
+    ? new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) {
+          var h = en.target; h._vis = en.isIntersecting;
+          if (h._vis) { if (!h._dead) mountVideo(h); } else unmountVideo(h);
+        });
+      }, { threshold: 0.35 })
+    : null;
+  function attachVideo(host, media) {
+    if (!hostIO || !media || !host.getAttribute("data-video") || host._media) return;
+    host._media = media; allHosts.push(host); hostIO.observe(host);
+  }
+  function reviveVideos() {
+    allHosts = allHosts.filter(function (h) { return document.body.contains(h); });
+    allHosts.forEach(function (h) {
+      if (!h._vis || h._dead) return;
+      if (!h._vid) mountVideo(h); else if (h._vid.paused) tryPlay(h._vid);
+    });
+  }
+  setInterval(function () { if (!document.hidden) reviveVideos(); }, 1500);
+  document.addEventListener("visibilitychange", function () { if (!document.hidden) reviveVideos(); });
+  ["touchstart", "pointerdown"].forEach(function (ev) { window.addEventListener(ev, reviveVideos, { passive: true }); });
 
   /* ---------- Scroll lock (mobile menu + reel player share it) ---------- */
   var locks = { nav: false, modal: false, intro: false };
@@ -1723,7 +1753,7 @@ a,button,label,select{touch-action:manipulation}
         scrollTrigger: { trigger: el, start: "top 88%" }
       });
     });
-    gsap.to(".hero-img", {
+    if (!isMobile) gsap.to(".hero-img", {
       yPercent: 8, ease: "none",
       scrollTrigger: { trigger: ".hero", start: "top top", end: "bottom top", scrub: true }
     });
