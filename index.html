@@ -106,20 +106,8 @@ h2 em,h1 em{font-style:italic;background:var(--grad);-webkit-background-clip:tex
 .phone-notch{position:absolute;top:11px;left:50%;transform:translateX(-50%);width:96px;height:22px;background:#12060a;border-radius:0 0 14px 14px;z-index:3}
 .phone-screen{position:relative;height:100%;overflow:hidden;border-radius:33px;background:#000;transform:translateZ(0)}
 .phone-track{display:flex;flex-direction:column;will-change:transform}
-.phone-track.is-looping{animation:phoneSwipe 30s infinite}
-.phone:hover .phone-track{animation-play-state:paused}
-@keyframes phoneSwipe{
-  0%{transform:translateY(0)}
-  17%{transform:translateY(0);animation-timing-function:cubic-bezier(.65,0,.2,1)}
-  20%{transform:translateY(-10%)}
-  37%{transform:translateY(-10%);animation-timing-function:cubic-bezier(.65,0,.2,1)}
-  40%{transform:translateY(-20%)}
-  57%{transform:translateY(-20%);animation-timing-function:cubic-bezier(.65,0,.2,1)}
-  60%{transform:translateY(-30%)}
-  77%{transform:translateY(-30%);animation-timing-function:cubic-bezier(.65,0,.2,1)}
-  80%{transform:translateY(-40%)}
-  97%{transform:translateY(-40%);animation-timing-function:cubic-bezier(.65,0,.2,1)}
-  100%{transform:translateY(-50%)}
+.phone-track.is-looping{animation:phoneScroll 15s linear infinite}
+@keyframes phoneScroll{from{transform:translateY(0)}to{transform:translateY(-50%)}}
 }
 .phone-card{position:relative;flex:0 0 auto;width:100%;aspect-ratio:9/14.5;margin:0 0 10px;border-radius:24px;overflow:hidden;background:#1d070b}
 .phone-card img{width:100%;height:100%;object-fit:cover}
@@ -298,15 +286,14 @@ h2 em,h1 em{font-style:italic;background:var(--grad);-webkit-background-clip:tex
 .copyright{text-align:center;margin-top:3.5rem;padding-top:1.5rem;border-top:1px solid rgba(217,164,65,.25);font-size:.85rem;color:#b89d83}
 
 /* floating quote button — bottom-right on every screen size */
-.float-quote{position:fixed;right:clamp(14px,2.4vw,28px);bottom:calc(clamp(14px,2.4vw,28px) + env(safe-area-inset-bottom));z-index:950;display:inline-flex;align-items:center;gap:.55rem;height:52px;padding:0 1.25rem 0 1.05rem;border-radius:999px;color:#fff;font-family:var(--sans);font-weight:600;font-size:.95rem;letter-spacing:.03em;white-space:nowrap;background:var(--grad);box-shadow:0 12px 30px rgba(90,10,18,.45),inset 0 0 0 1.5px rgba(246,217,160,.65);opacity:0;visibility:hidden;transform:translateY(16px);transition:opacity .4s ease,transform .4s cubic-bezier(.2,.9,.3,1.2),visibility 0s .4s,box-shadow .3s}
+.float-quote{position:fixed;right:calc(clamp(14px,2.4vw,28px) + env(safe-area-inset-right));bottom:calc(clamp(14px,2.4vw,28px) + env(safe-area-inset-bottom));z-index:950;display:flex;align-items:center;justify-content:center;width:56px;height:56px;border-radius:50%;color:#fff;background:var(--grad);box-shadow:0 12px 30px rgba(90,10,18,.45),inset 0 0 0 1.5px rgba(246,217,160,.65);opacity:0;visibility:hidden;transform:translateY(16px);transition:opacity .4s ease,transform .4s cubic-bezier(.2,.9,.3,1.2),visibility 0s .4s,box-shadow .3s}
 .float-quote.is-in{opacity:1;visibility:visible;transform:none;transition:opacity .4s ease,transform .4s cubic-bezier(.2,.9,.3,1.2),visibility 0s,box-shadow .3s}
 .float-quote:hover{box-shadow:0 16px 38px rgba(90,10,18,.55),inset 0 0 0 1.5px rgba(246,217,160,.9)}
 .float-quote:active{transform:scale(.95)}
 .float-quote:focus-visible{outline:3px solid #fff;outline-offset:3px}
 .float-quote::after{content:"";position:absolute;inset:0;border-radius:inherit;border:1.5px solid rgba(217,164,65,.7);animation:fqPulse 2.6s ease-out infinite;pointer-events:none}
-@keyframes fqPulse{0%{transform:scale(1);opacity:.85}70%{transform:scale(1.22,1.5);opacity:0}100%{transform:scale(1.22,1.5);opacity:0}}
+@keyframes fqPulse{0%{transform:scale(1);opacity:.85}70%{transform:scale(1.5);opacity:0}100%{transform:scale(1.5);opacity:0}}
 .float-quote.fq-away,.ui-locked .float-quote{opacity:0;visibility:hidden;transform:translateY(16px);pointer-events:none}
-@media(max-width:380px){.float-quote{padding:0 1rem 0 .9rem;font-size:.88rem}}
 
 /* reveal default (JS animates in) */
 .reveal{opacity:1}
@@ -627,6 +614,44 @@ body.ui-locked .site-header.scrolled{background:transparent;box-shadow:none}
   .phone-screen{container-type:size}
   .phone-card{aspect-ratio:auto;height:calc(100cqh - 10px)}
   .phone-card figcaption{padding-bottom:3.2rem}
+}
+
+/* ===== Round-4 ===== */
+/* Mukul frame: the orange border shimmers and glows, subtly */
+.photo-slot{background:linear-gradient(115deg,var(--sindoor) 0%,var(--saffron) 30%,#ffd687 50%,var(--saffron) 70%,var(--sindoor) 100%);background-size:260% 260%;animation:frameShimmer 5.5s ease-in-out infinite alternate,frameGlow 3.2s ease-in-out infinite alternate}
+@keyframes frameShimmer{from{background-position:0% 50%}to{background-position:100% 50%}}
+@keyframes frameGlow{from{box-shadow:var(--shadow),0 0 0 0 rgba(224,123,36,0)}to{box-shadow:var(--shadow),0 0 30px 3px rgba(224,123,36,.42)}}
+
+/* touch & phones */
+a,button,label,select{touch-action:manipulation}
+.reel-modal{overscroll-behavior:contain}
+.site-header{padding-left:max(4%,env(safe-area-inset-left));padding-right:max(4%,env(safe-area-inset-right));padding-top:calc(.65rem + env(safe-area-inset-top))}
+.site-header.scrolled{padding-top:calc(.35rem + env(safe-area-inset-top))}
+@media(max-width:820px){
+  /* story chips: one swipeable row instead of wrapping onto two lines */
+  .stories-inner{flex-wrap:nowrap;justify-content:safe center;overflow-x:auto;gap:1.1rem;padding:.2rem 4% .6rem;scrollbar-width:none;-webkit-overflow-scrolling:touch;scroll-snap-type:x proximity}
+  .stories-inner::-webkit-scrollbar{display:none}
+  .story-chip{flex:0 0 auto;scroll-snap-align:center}
+  /* comfortable tap targets */
+  .site-footer a,.contact-lines a,.pkg-note a{display:inline-flex;align-items:center;min-height:44px}
+  .footer-nav,.footer-contact,.footer-social{gap:0}
+  .main-nav a{padding:.7rem 1.4rem}
+  .faq-q{min-height:56px}
+  /* fewer simultaneous animations = smoother scrolling and less battery */
+  .ap-media img{animation:none}
+  .ap-progress{display:none}
+  .reel-card img{transition:none}
+  /* reel player fits any phone, close button stays reachable */
+  .reel-modal{padding:.6rem}
+  .reel-modal-box{width:min(430px,100%)}
+  .reel-modal-frame{height:min(calc(100dvh - 5.5rem),760px)}
+  .reel-modal-close{top:.7rem;right:.7rem;z-index:3;width:2.5rem;height:2.5rem;background:rgba(20,3,6,.6)}
+  .about-photo-caption{font-size:.8rem}
+  .review-card footer a{display:inline-flex;align-items:center;min-height:44px}
+}
+@media(max-width:560px){
+  .stories-inner{gap:.8rem}
+  .story-chip{font-size:.72rem;letter-spacing:.02em}
 }
 </style>
 <script type="application/ld+json">
@@ -1275,8 +1300,7 @@ body.ui-locked .site-header.scrolled{background:transparent;box-shadow:none}
 
 <!-- Floating quote button (all screens, bottom-right): one tap scrolls to the enquiry form -->
 <a class="float-quote" id="float-quote" href="#enquiry" aria-label="Get a quote — go to the enquiry form">
-  <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2.5"/><path d="M3 10h18"/><path d="M8 3v4M16 3v4"/><path d="m9.3 15.5 1.9 1.9 3.6-3.9"/></svg>
-  <span class="fq-label">Get a Quote</span>
+  <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2.5"/><path d="M3 10h18"/><path d="M8 3v4M16 3v4"/><path d="m9.3 15.5 1.9 1.9 3.6-3.9"/></svg>
 </a>
 
 <!-- Reel player -->
