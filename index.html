@@ -346,7 +346,7 @@ html{overflow-x:clip}
 .autoplay-viewport{overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent,#000 4%,#000 96%,transparent);mask-image:linear-gradient(90deg,transparent,#000 4%,#000 96%,transparent)}
 .autoplay-track{display:flex;gap:1.1rem;width:max-content;padding:.2rem 0 .4rem}
 .autoplay-track.ap-ready{animation:apScroll 38s linear infinite}
-.autoplay-viewport:hover .autoplay-track{animation-play-state:paused}
+@media(hover:hover) and (pointer:fine){.autoplay-viewport:hover .autoplay-track{animation-play-state:paused}}
 @keyframes apScroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 .ap-card{flex:0 0 auto;width:196px;color:#fff}
 .ap-media{position:relative;display:block;border-radius:20px;overflow:hidden;aspect-ratio:9/15.5;background:#1d070b;box-shadow:0 16px 38px rgba(0,0,0,.45)}
@@ -430,7 +430,6 @@ html{overflow-x:clip}
 .review-viewport{overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent,#000 5%,#000 95%,transparent);mask-image:linear-gradient(90deg,transparent,#000 5%,#000 95%,transparent);padding:.6rem 0 1rem}
 .review-grid{display:flex!important;gap:1.4rem;width:max-content;grid-template-columns:none}
 .review-grid.rv-ready{animation:rvScroll 46s linear infinite}
-.review-viewport:hover .review-grid,.review-viewport:active .review-grid{animation-play-state:paused}
 @keyframes rvScroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 .review-card{flex:0 0 360px;width:360px}
 
@@ -1337,7 +1336,7 @@ a,button,label,select{touch-action:manipulation}
 
   /* ---------- Muted autoplay previews: only on-screen cards hold a video ---------- */
   var saveData = navigator.connection && navigator.connection.saveData;
-  var MAX_LIVE = isMobile ? 4 : 8;
+  var MAX_LIVE = isMobile ? 6 : 8;
   var liveVids = [], allHosts = [];
   function tryPlay(v) { var p = v.play(); if (p && p.catch) p.catch(function () {}); }
   function mountVideo(host) {
@@ -1386,7 +1385,7 @@ a,button,label,select{touch-action:manipulation}
       if (!h._vid) mountVideo(h); else if (h._vid.paused) tryPlay(h._vid);
     });
   }
-  setInterval(function () { if (!document.hidden) reviveVideos(); }, 1500);
+  setInterval(function () { if (!document.hidden) reviveVideos(); }, 800);
   document.addEventListener("visibilitychange", function () { if (!document.hidden) reviveVideos(); });
   ["touchstart", "pointerdown"].forEach(function (ev) { window.addEventListener(ev, reviveVideos, { passive: true }); });
 
