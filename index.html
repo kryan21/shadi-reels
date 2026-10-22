@@ -654,6 +654,7 @@ a,button,label,select{touch-action:manipulation}
 }
 
 /* ===== Mobile fixes r6 ===== */
+.site-header.scrolled{background:rgb(250,243,231)}
 .phone-track.is-looping{animation-duration:22s}
 .phone-card video,.ap-media video,.reel-card video{background:transparent;opacity:0;transition:opacity .35s ease}
 .phone-card video.is-live,.ap-media video.is-live,.reel-card video.is-live{opacity:1}
@@ -1339,8 +1340,8 @@ a,button,label,select{touch-action:manipulation}
   var MAX_LIVE = isMobile ? 6 : 8;
   var liveVids = [], allHosts = [];
   function tryPlay(v) { var p = v.play(); if (p && p.catch) p.catch(function () {}); }
-  function mountVideo(host) {
-    if (host._vid || liveVids.length >= MAX_LIVE) return;
+  function mountVideo(host, force) {
+    if (host._vid || (!force && liveVids.length >= MAX_LIVE)) return;
     var media = host._media, img = media.querySelector("img");
     var v = document.createElement("video");
     v.muted = true; v.defaultMuted = true; v.loop = true; v.playsInline = true; v.autoplay = true;
@@ -1516,7 +1517,33 @@ a,button,label,select{touch-action:manipulation}
       c.setAttribute("aria-hidden", "true");
       phoneTrack.appendChild(c);
     });
-    phoneTrack.querySelectorAll(".phone-card").forEach(function (c) { attachVideo(c, c); });
+    /* Hero phone: don't rely on IntersectionObserver (unreliable inside the 3D/clipped phone on iOS).
+       Measure card positions against the phone screen directly, and start each video a bit BEFORE it scrolls in. */
+    if (!reduced && !saveData) {
+      var phoneScreen = phoneTrack.parentElement;
+      var phoneCards = Array.prototype.slice.call(phoneTrack.querySelectorAll(".phone-card"));
+      phoneCards.forEach(function (c) { c._media = c; allHosts.push(c); });
+      var phoneTick = function () {
+        if (document.hidden) return;
+        var sr = phoneScreen.getBoundingClientRect();
+        var onScreen = sr.bottom > 0 && sr.top < window.innerHeight;
+        phoneCards.forEach(function (c) {
+          var near = false;
+          if (onScreen) {
+            var r = c.getBoundingClientRect(), h = r.height;
+            near = r.bottom > sr.top - h * 0.25 && r.top < sr.bottom + h * 0.6;
+          }
+          c._vis = near;
+          if (near) {
+            if (c._dead) return;
+            if (!c._vid) mountVideo(c, true);
+            else if (c._vid.paused) tryPlay(c._vid);
+          } else unmountVideo(c);
+        });
+      };
+      phoneTick();
+      setInterval(phoneTick, 400);
+    }
     if (!reduced) phoneTrack.classList.add("is-looping");
   }
 
